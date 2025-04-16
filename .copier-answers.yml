@@ -1,0 +1,9 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: 3179c16
+_src_path: gh:schwallergroup/copier-liac-minimal
+author_email: naomi.pantillon@epfl.ch
+author_name: Naomi
+github_org: NaomiPant
+package_name: aminoacid
+project_name: aminoacid
+short_description: A game to learn amino acids
