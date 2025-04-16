@@ -1,7 +1,6 @@
- HEAD
 # aminoacid
 
-![Project Logo](assets/banner.png)
+![Project Logo](assets/aminoacids.png)
 
 ![Coverage Status](assets/coverage-badge.svg)
 
@@ -77,7 +76,3 @@ To install the package, run
 (conda_env) $ pip install tox
 (conda_env) $ tox
 ```
-
-
-
-800fdee (Initial package setup with Copier)
