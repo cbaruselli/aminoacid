@@ -36,13 +36,12 @@ conda create -n aminoacid python=3.10
 
 ```
 conda activate aminoacid
-(conda_env) $ pip install .
 ```
 
 If you need jupyter lab, install it 
 
 ```
-(aminoacid) $ pip install jupyterlab
+(aminoacid) pip install jupyterlab
 ```
 
 
