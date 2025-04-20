@@ -11,7 +11,7 @@ aminoacid
 <br>
 
 
-A game to learn amino acids
+Aminoacid is an interactive game to learn and test your knowledge of the different amino acids
 
 ## 🔥 Usage
 
