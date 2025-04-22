@@ -1,11 +1,9 @@
-# Aminoacid
-
 ![Project Logo](assets/aminoacids.png)
 
 ![Coverage Status](assets/coverage-badge.svg)
 
 <h1 align="center">
-aminoacid
+Aminoacid
 </h1>
 
 <br>
