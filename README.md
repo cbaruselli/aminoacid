@@ -1,4 +1,4 @@
-# aminoacid
+# Aminoacid
 
 ![Project Logo](assets/aminoacids.png)
 
@@ -11,7 +11,7 @@ aminoacid
 <br>
 
 
-Aminoacid is an interactive game to learn and test your knowledge of the different amino acids
+Aminoacid is an interactive game to learn and test your knowledge of the different amino acids.
 
 ## 🔥 Usage
 
@@ -38,40 +38,33 @@ conda create -n aminoacid python=3.10
 conda activate aminoacid
 ```
 
-If you need jupyter lab, install it 
+The package can be clone on your local machine using the following command lines:
 
 ```
-(aminoacid) pip install jupyterlab
+git clone https://github.com/cbaruselli/aminoacid.git
 ```
 
-
-## 🛠️ Development installation
-
-Initialize Git (only for the first time). 
-
-Note: You should have create an empty repository on `https://github.com:NaomiPant/aminoacid`.
+Then, to install the package, you can run:
 
 ```
-git init
-git add * 
-git add .*
-git commit -m "Initial commit" 
-git branch -M main
-git remote add origin git@github.com:NaomiPant/aminoacid.git 
-git push -u origin main
+pip install -e .
 ```
 
-Then add and commit changes as usual. 
+## 🛠️ Requirements
 
-To install the package, run
+The package runs with different other packages to function properly. The file "requirements.txt" has been used to prevent compatibility issues. 
+
+To install the packages in "requirements.txt", use the following commands:
+
 
 ```
-(aminoacid) $ pip install -e ".[test,doc]"
+pip install -r requirements.txt
 ```
+
 
 ### Run tests and coverage
 
 ```
-(conda_env) $ pip install tox
-(conda_env) $ tox
+pip install tox
+tox
 ```
