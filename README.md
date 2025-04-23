@@ -1,4 +1,4 @@
-![Project Logo](assets/aminoacids.png)
+![Project Logo](assets/aminoacid.png)
 
 ![Coverage Status](assets/coverage-badge.svg)
 
