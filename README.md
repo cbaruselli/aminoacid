@@ -1,4 +1,6 @@
-![Project Logo](assets/aminoacid.png)
+<div align="center"> 
+  <img src="assets/aminoacid.png" width="800">
+</div>
 
 ![Coverage Status](assets/coverage-badge.svg)
 
@@ -9,7 +11,7 @@ Aminoacid
 <br>
 
 
-Aminoacid is an interactive game to learn and test your knowledge of the different amino acids.
+Aminoacid is an interactive game divided in two parts. The first one allows you to learn the structure of the 20 aminoacids and test your knowledge with the game.
 
 ## 🔥 Usage
 
