@@ -127,26 +127,26 @@ def show_learn():
 
     amino_acids = {
         "Glycine (Gly, G)": "C(C(=O)O)N",
-        "Alanine (Ala, A)": "CC(C(=O)O)N",
-        "Valine (Val, V)": "CC(C)C(C(=O)O)N",
-        "Leucine (Leu, L)": "CC(C)CC(C(=O)O)N",
-        "Isoleucine (Ile, I)": "CC(C)C(C(=O)O)N",
-        "Serine (Ser, S)": "C(C(C(=O)O)N)O",
-        "Threonine (Thr, T)": "CC(C(C(=O)O)N)O",
-        "Cysteine (Cys, C)": "C(C(C(=O)O)N)S",
-        "Methionine (Met, M)": "CSCC(C(=O)O)N",
-        "Phenylalanine (Phe, F)": "C1=CC=CC=C1CC(C(=O)O)N",
-        "Tyrosine (Tyr, Y)": "C1=CC=C(C=C1)CC(C(=O)O)N",
-        "Tryptophan (Trp, W)": "C1=CC=C2C(=C1)C=CN2CC(C(=O)O)N",
-        "Asparagine (Asn, N)": "C(CC(=O)N)(C(=O)O)N",
-        "Glutamine (Gln, Q)": "C(CCC(=O)N)(C(=O)O)N",
-        "Aspartic acid (Asp, D)": "C(CC(=O)O)(C(=O)O)N",
-        "Glutamic acid (Glu, E)": "C(CCC(=O)O)(C(=O)O)N",
-        "Lysine (Lys, K)": "C(CCCN)CC(C(=O)O)N",
-        "Arginine (Arg, R)": "C(CCCN=C(N)N)CC(C(=O)O)N",
-        "Histidine (His, H)": "C1=CNC=N1CC(C(=O)O)N",
-        "Proline (Pro, P)": "C1CC(NC1)C(=O)O"
-    }
+        "Alanine (Ala, A)": "C[C@@H](C(=O)O)N",
+        "Valine (Val, V)": "CC(C)[C@H](N)C(O)=O",
+        "Leucine (Leu, L)": "CC(C)C[C@@H](C(=O)O)N",
+        "Isoleucine (Ile, I)": "N[C@@H](C(C)CC)C(=O)O",
+        "Serine (Ser, S)": "N[C@@H](CO)C(=O)O",
+        "Threonine (Thr, T)": "C[C@H]([C@@H](C(=O)O)N)O",
+        "Cysteine (Cys, C)": "N[C@@H](CS)C(=O)O",
+        "Methionine (Met, M)": "N[C@@H](CCSC)C(=O)O",
+        "Phenylalanine (Phe, F)": "N[C@@H](CC1=CC=CC=C1)C(=O)O",
+        "Tyrosine (Tyr, Y)": "N[C@@H](CC1=CC=C(O)C=C1)C(=O)O",
+        "Tryptophan (Trp, W)": "N[C@@H](CC1=CNC2=CC=CC=C12)C(=O)O",
+        "Asparagine (Asn, N)": "N[C@@H](CC(=O)N)C(=O)O",
+        "Glutamine (Gln, Q)": "N[C@@H](CCC(=O)N)C(=O)O",
+        "Aspartic acid (Asp, D)": "N[C@@H](CC(=O)O)C(=O)O",
+        "Glutamic acid (Glu, E)": "N[C@@H](CCC(=O)O)C(=O)O",
+        "Lysine (Lys, K)": "N[C@@H](CCCCN)C(=O)O",
+        "Arginine (Arg, R)": "N[C@@H](CCCNC(=N)N)C(=O)O",
+        "Histidine (His, H)": "N[C@@H](CC1=CN=CN1)C(=O)O",
+        "Proline (Pro, P)": "C1C[C@H](NC1)C(=O)O"
+        }
 
     selected_name = st.selectbox("Choose an amino acid:", list(amino_acids.keys()))
 
