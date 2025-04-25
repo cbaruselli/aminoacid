@@ -5,7 +5,7 @@ from rdkit.Chem import Draw #nao
 from rdkit.Chem import rdMolDescriptors #moni
 import random #moni
 
-st.title("🎯 aminoacid")
+st.title("🎯 Aminoacid")
 
 if "page" not in st.session_state:
     st.session_state.page = "menu"
@@ -24,8 +24,8 @@ def show_menu():
             st.session_state.page = "learn"
             st.rerun()
 
-def show_quizz():
-    st.markdown("## 🎮 Quizz")
+def draw_quizz():
+    st.markdown("## 🎮 Quizz : Draw amino acids")
     st.write("Let's test your knowledge!")
     st.markdown("---")
 
@@ -139,6 +139,67 @@ def show_quizz():
     if st.button("🔙 back to menu"):
         st.session_state.page = "menu"
         st.rerun()
+
+def name_quizz():
+    st.markdown("## ✏️ Quizz : Name amino acids")
+    st.write("Guess the name of the amino acid based on their structure.")
+
+    amino_acids = {
+        "Alanine": "CC(C(=O)O)N",
+        "Arginine": "NC(CCCNC(=N)N)C(=O)O",
+        "Asparagine": "C(CC(=O)N)(C(=O)O)N",
+        "Aspartic Acid": "NC(C(=O)O)CC(=O)O",
+        "Cysteine": "C(C(C(=O)O)N)S",
+        "Glutamic Acid": "C(CCC(=O)O)(C(=O)O)N",
+        "Glutamine": "C(CCC(=O)N)(C(=O)O)N",
+        "Glycine": "NCC(=O)O",
+        "Histidine": "NC(C(=O)O)Cc1c[nH]cn1",
+        "Isoleucine": "CCC(C)C(C(=O)O)N",
+        "Leucine": "CC(C)CC(C(=O)O)N",
+        "Lysine": "NC(CCCCN)C(=O)O",
+        "Methionine": "CSCCC(C(=O)O)N",
+        "Phenylalanine": "NC(Cc1ccccc1)C(=O)O",
+        "Proline": "O=C(O)C1CCCN1",
+        "Serine": "C(C(C(=O)O)N)O",
+        "Threonine": "CC(C(C(=O)O)N)O",
+        "Tryptophan": "NC(Cc1c[nH]c2ccccc12)C(=O)O",
+        "Tyrosine": "NC(Cc1ccc(O)cc1)C(=O)O",
+        "Valine": "CC(C)C(C(=O)O)N"
+    }
+
+    if "reverse_target" not in st.session_state:
+        st.session_state.reverse_target = random.choice(list(amino_acids.items()))
+
+    correct_name, smiles = st.session_state.reverse_target
+    mol = Chem.MolFromSmiles(smiles)
+
+    if mol:
+        st.image(Draw.MolToImage(mol, size=(300, 300)), caption="Guess this amino acid")
+
+    user_guess = st.text_input("Enter the name of this amino acid:").strip()
+
+    if st.button("Check answer"):
+        if user_guess.lower() == correct_name.lower():
+            st.success("✅ Correct!")
+        else:
+            st.error(f"❌ Nope! The correct answer was: **{correct_name}**")
+
+    if st.button("Next molecule"):
+        st.session_state.reverse_target = random.choice(list(amino_acids.items()))
+        st.rerun()
+
+    if st.button("🔙 back to menu"):
+        st.session_state.page = "menu"
+        st.rerun()
+
+
+def show_quizz():
+    mode = st.radio("Select a game mode :", ["📗 Draw amino acids", "🖌 Name amino acids"])
+    if mode == "📗 Draw amino acids":
+        draw_quizz()
+    elif mode == "🖌 Name amino acids":
+        name_quizz()
+ 
 
 def show_learn():
     st.markdown("## 📚 Learn the amino acid")
