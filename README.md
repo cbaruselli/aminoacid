@@ -52,10 +52,7 @@ pip install -e .
 
 ## 🛠️ Requirements
 
-The package runs with different other packages to function properly. The file "requirements.txt" has been used to prevent compatibility issues. 
-
-To install the packages in "requirements.txt", use the following commands:
-
+The package requires other dependencies to run. The file "requirements.txt" lists all dependencies at the specific version we used. The package installation (previous section) should install the requirements properly. In case it failed or you want to install them separatly, use the following command:
 
 ```
 pip install -r requirements.txt
