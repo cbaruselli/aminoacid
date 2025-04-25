@@ -27,8 +27,9 @@ def show_menu():
 def show_quizz():
     st.markdown("## 🎮 Quizz")
     st.write("Let's test your knowledge!")
+    st.markdown("---")
 
-    # Step 1: Define your amino acids (add more later)
+    # Step 1: Define your amino acids
     amino_acids = {
         "Alanine": "CC(C(=O)O)N",
         "Arginine": "NC(CCCNC(=N)N)C(=O)O",
@@ -72,6 +73,8 @@ def show_quizz():
     st.markdown(f"Draw this amino acid in the box below: **{current_target}**")
     st.markdown("Once you are done, click **Apply** to see if it's correct!")
     st.markdown("And move on to the next question with **Next**.")
+    progress = (st.session_state.current_index + 1) / len(amino_acids)
+    st.progress(progress, text= f"Progress : {st.session_state.current_index + 1} / {len(amino_acids)}")
 
     # Step 5: User draws molecule
     ketcher_smiles = st_ketcher(height=600, key=f"ketcher_{st.session_state.ketcher_key}")
