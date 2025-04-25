@@ -113,7 +113,17 @@ def show_quizz():
     elif st.session_state.current_index == len(amino_acids) - 1:
         if st.button("Show score"):
             st.header("🏁 Round Complete!")
+            percent_score = (st.session_state.score / len(amino_acids)) * 100
             st.success(f"Your final score is : {st.session_state.score} / {len(amino_acids)}")
+            if percent_score == 100:
+                st.balloons()
+                st.markdown("🎉 You're an amino acid expert !")
+            elif percent_score >= 75:
+                st.markdown("Great job 👏 : You know your stuff !")
+            elif percent_score >= 50:
+                st.markdown("🧪 Keep practicing and you'll get there.")
+            else:
+                st.markdown("📚 It's time to hit the books, don't give up !")
             st.markdown("---")
         if st.button("Restart"):
             keys_to_clear = ["current_index", "ketcher_key", "score", "answered", "round_order"]
@@ -175,8 +185,3 @@ elif st.session_state.page == "quizz":
     show_quizz()
 elif st.session_state.page == "learn":
     show_learn()
-
-
-
-
-
