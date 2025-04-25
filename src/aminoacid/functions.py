@@ -203,8 +203,10 @@ def show_quizz():
 
 def show_learn():
     st.markdown("## 📚 Learn the amino acid")
-    st.caption("What is the structure of a amino acid?") #NAOMI
-    st.write("An amino acid  contains both amino and  carboxylic acid functional groupe, a carbon alpha and a side chain which is variable.")
+    st.caption("What is the structure of a amino acid?") 
+    st.write("An amino acid contains both amino and carboxylic acid functional groupe, a carbon alpha and a side chain which is variable."
+             "In nature you can only find the L-configuration of amino acids, therefore they will be drawn in this configuration."
+             )
     img= "aastruct.jpeg"
     st.image(img, caption="Amino acid structure", use_container_width=True)
     st.write("Select an amino acid to view its molecular structure:") 
@@ -231,7 +233,7 @@ def show_learn():
         "Histidine (His, H)": "N[C@@H](CC1=CN=CN1)C(=O)O",
         "Proline (Pro, P)": "C1C[C@H](NC1)C(=O)O"
         }
-
+# Dropdown menu where you can select the amino acids to be drawn.
     selected_name = st.selectbox("Choose an amino acid:", list(amino_acids.keys()))
 
     smiles = amino_acids[selected_name]
