@@ -17,10 +17,12 @@ def show_menu():
     with col1:
         if st.button("🧪 Quizz"):
             st.session_state.page = "quizz"
+            st.rerun()
 
     with col2:
         if st.button("📘 Learn the amino acid"):
             st.session_state.page = "learn"
+            st.rerun()
 
 def show_quizz():
     st.markdown("## 🎮 Quizz")
@@ -92,6 +94,13 @@ def show_quizz():
                 st.session_state.answered = True
         else:
             st.error("❌ Not quite right. Keep on training!")
+            st.markdown(f"The answer is : " )
+            mol = Chem.MolFromSmiles(target_smiles)
+            if mol:
+                img = Draw.MolToImage(mol, size=(300, 300))
+                st.image(img, caption=f"Structure of {current_target}", use_container_width=False)
+            else:
+                st.warning("Impossible to generate the molecule from SMILES.")
             st.markdown("---")
 
     # Step 8: Go to next
@@ -116,6 +125,7 @@ def show_quizz():
 
     if st.button("🔙 back to menu"):
         st.session_state.page = "menu"
+        st.rerun()
 
 def show_learn():
     st.markdown("## 📚 Learn the amino acid")
@@ -157,6 +167,7 @@ def show_learn():
 
     if st.button("🔙 back to menu"):
         st.session_state.page = "menu"
+        st.rerun()
 
 if st.session_state.page == "menu":
     show_menu()
