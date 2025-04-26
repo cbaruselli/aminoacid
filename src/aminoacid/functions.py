@@ -148,50 +148,74 @@ def name_quizz():
         "Alanine": "CC(C(=O)O)N",
         "Arginine": "NC(CCCNC(=N)N)C(=O)O",
         "Asparagine": "C(CC(=O)N)(C(=O)O)N",
-        "Aspartic Acid": "NC(C(=O)O)CC(=O)O",
-        "Cysteine": "C(C(C(=O)O)N)S",
-        "Glutamic Acid": "C(CCC(=O)O)(C(=O)O)N",
-        "Glutamine": "C(CCC(=O)N)(C(=O)O)N",
-        "Glycine": "NCC(=O)O",
-        "Histidine": "NC(C(=O)O)Cc1c[nH]cn1",
-        "Isoleucine": "CCC(C)C(C(=O)O)N",
-        "Leucine": "CC(C)CC(C(=O)O)N",
-        "Lysine": "NC(CCCCN)C(=O)O",
-        "Methionine": "CSCCC(C(=O)O)N",
-        "Phenylalanine": "NC(Cc1ccccc1)C(=O)O",
-        "Proline": "O=C(O)C1CCCN1",
-        "Serine": "C(C(C(=O)O)N)O",
-        "Threonine": "CC(C(C(=O)O)N)O",
-        "Tryptophan": "NC(Cc1c[nH]c2ccccc12)C(=O)O",
-        "Tyrosine": "NC(Cc1ccc(O)cc1)C(=O)O",
-        "Valine": "CC(C)C(C(=O)O)N"
     }
+    #Creation of random but once
+    if "name_quizz_order" not in st.session_state:
+        st.session_state.name_quizz_order = random.sample(list(amino_acids.items()), len(amino_acids))
+        st.session_state.name_quizz_index = 0
+    if "name_quizz_score" not in st.session_state:
+        st.session_state.name_quizz_score = 0
+    if "user_guess_input" not in st.session_state:
+        st.session_state.user_guess_input = ""
+    if "reset_input_flag" not in st.session_state: 
+        st.session_state.reset_input_flag = False
 
-    if "reverse_target" not in st.session_state:
-        st.session_state.reverse_target = random.choice(list(amino_acids.items()))
+    #Get the current aminoacid
+    if st.session_state.name_quizz_index < len(st.session_state.name_quizz_order):
+        correct_name, smiles = st.session_state.name_quizz_order[st.session_state.name_quizz_index]
+        mol = Chem.MolFromSmiles(smiles)
 
-    correct_name, smiles = st.session_state.reverse_target
-    mol = Chem.MolFromSmiles(smiles)
+        #progress bar
+        progress = st.session_state.name_quizz_index + 1
+        total = len(st.session_state.name_quizz_order)
+        st.progress(progress / total)
+        st.write(f"Question {progress} of {total}")
 
-    if mol:
-        st.image(Draw.MolToImage(mol, size=(300, 300)), caption="Guess this amino acid")
+        if mol:
+            st.image(Draw.MolToImage(mol, size=(300, 300)), caption="Guess this amino acid")
 
-    user_guess = st.text_input("Enter the name of this amino acid:").strip()
+        default_value = "" if st.session_state.reset_input_flag else st.session_state.get("user_guess_input", "")
+        user_guess = st.text_input("Enter the name of this amino acid:", value=default_value, key="user_guess_input").strip()
 
-    if st.button("Check answer"):
-        if user_guess.lower() == correct_name.lower():
-            st.success("✅ Correct!")
+        if st.session_state.reset_input_flag:  #to remove the name after the click
+            st.session_state.reset_input_flag = False
+        
+        if st.button("Check answer"):
+            if user_guess.lower() == correct_name.lower():
+                st.success("✅ Correct!")
+                st.session_state.name_quizz_score += 1
+            else:
+                st.error(f"❌ Nope! The correct answer was: **{correct_name}**")
+
+        if st.button("Next molecule"):
+            st.session_state.name_quizz_index += 1
+            st.session_state.reset_input_flag = True  
+            st.rerun()
+
+    else:
+        st.success("🏁 You've completed all the amino acids!")
+        percent_score = (st.session_state.name_quizz_score / len(amino_acids)) * 100
+        st.success(f"Your final score is : {st.session_state.name_quizz_score} / {len(amino_acids)}")
+        if percent_score == 100:
+            st.balloons()
+            st.markdown("🎉 You're an amino acid expert !")
+        elif percent_score >= 75:
+            st.markdown("Great job 👏 : You know your stuff !")
+        elif percent_score >= 50:
+            st.markdown("🧪 Keep practicing and you'll get there.")
         else:
-            st.error(f"❌ Nope! The correct answer was: **{correct_name}**")
+            st.markdown("📚 It's time to hit the books, don't give up !")
+        st.markdown("---")
 
-    if st.button("Next molecule"):
-        st.session_state.reverse_target = random.choice(list(amino_acids.items()))
-        st.rerun()
+        if st.button("Restart"):
+            for key in ["name_quizz_order", "name_quizz_index", "name_quizz_score", "user_guess_input"]:
+                if key in st.session_state:
+                    del st.session_state[key]
+            st.rerun()
 
     if st.button("🔙 back to menu"):
-        st.session_state.page = "menu"
-        st.rerun()
-
+            st.session_state.page = "menu"
+            st.rerun()
 
 def show_quizz():
     mode = st.radio("Select a game mode :", ["📗 Draw amino acids", "🖌 Name amino acids"])
