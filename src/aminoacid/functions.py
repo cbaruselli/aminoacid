@@ -99,7 +99,12 @@ def draw_quizz():
     st.progress(progress, text= f"Progress : {st.session_state.current_index + 1} / {len(amino_acids)}")
 
     # Step 5: User draws molecule
-    ketcher_smiles = st_ketcher(height=600, key=f"ketcher_{st.session_state.ketcher_key}")
+    if not st.session_state.answered:
+        ketcher_smiles = st_ketcher(height=600, key=f"ketcher_{st.session_state.ketcher_key}")
+    else:
+        st.info("You already answered! Click **Next** to continue.")
+        ketcher_smiles = None
+    
 
     # Step 6: Normalize and compare molecules
     def are_equivalent(smiles1, smiles2):
@@ -119,6 +124,7 @@ def draw_quizz():
                 st.session_state.answered = True
         else:
             st.error("❌ Not quite right. Keep on training!")
+            st.session_state.answered = True
             st.markdown(f"The answer is : " )
             mol = Chem.MolFromSmiles(target_smiles)
             if mol:
@@ -198,6 +204,8 @@ def name_quizz():
         st.session_state.user_guess_input = ""
     if "reset_input_flag" not in st.session_state: 
         st.session_state.reset_input_flag = False
+    if "name_quizz_answered" not in st.session_state:
+        st.session_state.name_quizz_answered = False
 
     #Get the current aminoacid
     if st.session_state.name_quizz_index < len(st.session_state.name_quizz_order):
@@ -219,16 +227,21 @@ def name_quizz():
         if st.session_state.reset_input_flag:  #to remove the name after the click
             st.session_state.reset_input_flag = False
         
-        if st.button("Check answer"):
+        if st.session_state.name_quizz_answered:
+            st.info("You already answered! Click **Next molecule** to continue." )
+        
+        if st.button("Check answer") and not st.session_state.name_quizz_answered:
             if user_guess.lower() == correct_name.lower():
                 st.success("✅ Correct!")
                 st.session_state.name_quizz_score += 1
             else:
                 st.error(f"❌ Nope! The correct answer was: **{correct_name}**")
+            st.session_state.name_quizz_answered = True
 
         if st.button("Next molecule"):
             st.session_state.name_quizz_index += 1
-            st.session_state.reset_input_flag = True  
+            st.session_state.reset_input_flag = True 
+            st.session_state.name_quizz_answered = False 
             st.rerun()
 
     else:
