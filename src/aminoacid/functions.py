@@ -91,7 +91,7 @@ def draw_quizz():
     current_target = st.session_state.round_order[st.session_state.current_index]
     target_smiles = amino_acids[current_target]
 
-    # Step 4: Display game info
+    # Step 4: Display game info and progress bar
     st.markdown(f"Draw this amino acid in the box below: **{current_target}**")
     st.markdown("Once you are done, click **Apply** to see if it's correct!")
     st.markdown("And move on to the next question with **Next**.")
@@ -163,6 +163,10 @@ def draw_quizz():
         st.rerun()
 
 def name_quizz():
+    '''
+    Function used to write the name of the amino acid from its structure.
+    '''
+
     st.markdown("## ✏️ Quizz : Name amino acids")
     st.write("Guess the name of the amino acid based on their structure.")
 
@@ -188,7 +192,7 @@ def name_quizz():
         "Tyrosine": "NC(Cc1ccc(O)cc1)C(=O)O",
         "Valine": "CC(C)C(C(=O)O)N"
     }
-    #Creation of random but once
+    #Creation of session state
     if "name_quizz_order" not in st.session_state:
         st.session_state.name_quizz_order = random.sample(list(amino_acids.items()), len(amino_acids))
         st.session_state.name_quizz_index = 0
@@ -204,7 +208,7 @@ def name_quizz():
         correct_name, smiles = st.session_state.name_quizz_order[st.session_state.name_quizz_index]
         mol = Chem.MolFromSmiles(smiles)
 
-        #progress bar
+        #Progress bar
         progress = st.session_state.name_quizz_index + 1
         total = len(st.session_state.name_quizz_order)
         st.progress(progress / total)
@@ -213,12 +217,14 @@ def name_quizz():
         if mol:
             st.image(Draw.MolToImage(mol, size=(300, 300)), caption="Guess this amino acid")
 
+        #To remove the name after the click on "Next molecule"
         default_value = "" if st.session_state.reset_input_flag else st.session_state.get("user_guess_input", "")
         user_guess = st.text_input("Enter the name of this amino acid:", value=default_value, key="user_guess_input").strip()
 
-        if st.session_state.reset_input_flag:  #to remove the name after the click
+        if st.session_state.reset_input_flag:  
             st.session_state.reset_input_flag = False
         
+        #Check the answer
         if st.button("Check answer"):
             if user_guess.lower() == correct_name.lower():
                 st.success("✅ Correct!")
@@ -231,6 +237,7 @@ def name_quizz():
             st.session_state.reset_input_flag = True  
             st.rerun()
 
+    #Feedback
     else:
         st.success("🏁 You've completed all the amino acids!")
         percent_score = (st.session_state.name_quizz_score / len(amino_acids)) * 100
@@ -257,6 +264,9 @@ def name_quizz():
             st.rerun()
 
 def show_quizz():
+    '''
+    Allows you to choose which game mode you want between 'Draw amino acids' and 'Name amino acids'.
+    '''
     st.markdown(
     """
     <style>
