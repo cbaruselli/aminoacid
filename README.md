@@ -65,3 +65,13 @@ pip install -r requirements.txt
 pip install tox
 tox
 ```
+
+## 📖 Autors 
+
+Chloé Baruselli: https://github.com/cbaruselli 
+
+Monica Minazzo: https://github.com/mminazzo 
+
+Naomi Pantillon: https://github.com/NaomiPant 
+
+Cléa Pernet: https://github.com/clea04 
