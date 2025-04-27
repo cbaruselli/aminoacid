@@ -164,9 +164,30 @@ def draw_quizz():
             st.rerun()
 
 
-    if st.button("🔙 back to menu"):
+    if st.button("🔙 Back to menu"):
         st.session_state.page = "menu"
         st.rerun()
+
+def reset_quizz(quizz_variables=[]):
+    '''
+    To reset the sessions after finishing it.
+    
+    Input: list with object by default. 
+    '''
+    quizz_variables = quizz_variables or [
+        'name_quizz_order',
+        'wrong_answers',
+        'reset_input_flag',
+        'name_quizz_score',
+        'name_quizz_index',
+        'user_guess_input',
+        'name_quizz_answered'
+        ]
+    
+    for variable in quizz_variables:
+        if hasattr(st.session_state, variable):
+            del st.session_state[variable]
+
 
 def name_quizz():
     '''
@@ -202,6 +223,7 @@ def name_quizz():
     if "name_quizz_order" not in st.session_state:
         st.session_state.name_quizz_order = random.sample(list(amino_acids.items()), len(amino_acids))
         st.session_state.name_quizz_index = 0
+        st.session_state.wrong_answers = [] #list to keep the wrong answers
     if "name_quizz_score" not in st.session_state:
         st.session_state.name_quizz_score = 0
     if "user_guess_input" not in st.session_state:
@@ -210,6 +232,7 @@ def name_quizz():
         st.session_state.reset_input_flag = False
     if "name_quizz_answered" not in st.session_state:
         st.session_state.name_quizz_answered = False
+    
 
     #Get the current aminoacid
     if st.session_state.name_quizz_index < len(st.session_state.name_quizz_order):
@@ -233,45 +256,90 @@ def name_quizz():
             st.session_state.reset_input_flag = False
         
         if st.session_state.name_quizz_answered:
-            st.info("You already answered! Click **Next molecule** to continue." )
-    #Check answer
-        if st.button("Check answer") and not st.session_state.name_quizz_answered:
-            if user_guess.lower() == correct_name.lower():
-                st.success("✅ Correct!")
-                st.session_state.name_quizz_score += 1
-            else:
-                st.error(f"❌ Nope! The correct answer was: **{correct_name}**")
-            st.session_state.name_quizz_answered = True
+            st.info("You already answered! Click **Next molecule** to continue.")
 
-        if st.button("Next molecule"):
-            st.session_state.name_quizz_index += 1
-            st.session_state.reset_input_flag = True 
-            st.session_state.name_quizz_answered = False 
-            st.rerun()
+    #Check answer
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Check answer") and not st.session_state.name_quizz_answered:
+                if user_guess.lower() == correct_name.lower():
+                    st.success("✅ Correct!")
+                    st.session_state.name_quizz_score += 1
+                else:
+                    st.error(f"❌ Nope! The correct answer was: **{correct_name}**")
+                    st.session_state.wrong_answers.append(correct_name) #save which aminoacids is wrong
+                st.session_state.name_quizz_answered = True
+
+        with col2:
+            if st.button("Next molecule"):
+                if not st.session_state.name_quizz_answered: 
+                    st.session_state.wrong_answers.append(correct_name)  #Append the answer as wrong in case the user didn't check the answer/ wrote an answer and directly click on "Next molecule"
+                st.session_state.name_quizz_index += 1
+                st.session_state.reset_input_flag = True 
+                st.session_state.name_quizz_answered = False 
+                st.rerun()
 
     #Feedback
     else:
         st.success("🏁 You've completed all the amino acids!")
-        percent_score = (st.session_state.name_quizz_score / len(amino_acids)) * 100
-        st.success(f"Your final score is : {st.session_state.name_quizz_score} / {len(amino_acids)}")
+        retry_mode = st.session_state.get("retry_mode", False) #To see if retry_mode is active or not
+
+        tot_questions= len(st.session_state.name_quizz_order) if retry_mode else len(amino_acids) #Adapt the nb of total questions depending on the mode
+        percent_score = (st.session_state.name_quizz_score / tot_questions) * 100
+
         if percent_score == 100:
             st.balloons()
-            st.markdown("🎉 You're an amino acid expert !")
+            st.success(f"Your final score is : {st.session_state.name_quizz_score} / {tot_questions}")
+            if retry_mode:
+                st.markdown("🎯 Perfect corrections !")
+            else:
+                st.markdown("🎉 You're an expert !")
         elif percent_score >= 75:
-            st.markdown("Great job 👏 : You know your stuff !")
+            st.success(f"Your final score is : {st.session_state.name_quizz_score} / {tot_questions}")
+            if retry_mode:
+                st.markdown("🎊 Almost right !")
+            else:
+                st.markdown("Great job 👏 : A little more practice and it will be perfect !")
         elif percent_score >= 50:
-            st.markdown("🧪 Keep practicing and you'll get there.")
+            st.success(f"Your final score is : {st.session_state.name_quizz_score} / {tot_questions}")
+            if retry_mode:
+                st.markdown("📗 Continue like that !")
+            else:
+                st.markdown("🧪 Keep practicing and you'll get there.")
         else:
-            st.markdown("📚 It's time to hit the books, don't give up !")
+            st.warning(f"Your final score is : {st.session_state.name_quizz_score} / {tot_questions}")
+            if retry_mode:
+                st.markdown("📚 Don't give up, study more if needed !")
+            else:
+                st.markdown("📚 It's time to hit the books, don't give up !")
         st.markdown("---")
 
-        if st.button("Restart"):
-            for key in ["name_quizz_order", "name_quizz_index", "name_quizz_score", "user_guess_input"]:
-                if key in st.session_state:
-                    del st.session_state[key]
-            st.rerun()
+        #Practice the wrong aminoacids
+        if st.session_state.wrong_answers:
+            st.warning(f"You missed {len(st.session_state.wrong_answers)} amino acids !")
 
-    if st.button("🔙 back to menu"):
+            col3, col4 = st.columns(2)
+            with col3:
+                if st.button("🔄 Retry incorrect answers "):
+                    st.session_state.name_quizz_order = [(aa, amino_acids[aa]) for aa in st.session_state.wrong_answers]
+                    st.session_state.name_quizz_index = 0
+                    st.session_state.name_quizz_score = 0
+                    st.session_state.wrong_answers = []
+                    st.session_state.reset_input_flag = False
+                    st.session_state.name_quizz_answered = False
+                    st.session_state.retry_mode = True 
+                    st.rerun()
+
+            with col4:
+                if st.button("Restart"):
+                    reset_quizz(["name_quizz_order", "name_quizz_index", "name_quizz_score", "user_guess_input"])
+                    st.rerun()
+        else:
+            if st.button("Restart"):
+                reset_quizz()
+                st.rerun()
+
+    if st.button("🔙 Back to menu"):
             st.session_state.page = "menu"
             st.rerun()
 
@@ -348,7 +416,7 @@ def show_learn():
     img = Draw.MolToImage(mol, size=(400, 400))
     st.image(img, caption=selected_name, use_container_width=False)
 
-    if st.button("🔙 back to menu"):
+    if st.button("🔙 Back to menu"):
         st.session_state.page = "menu"
         st.rerun()
 
