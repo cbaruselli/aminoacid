@@ -12,10 +12,10 @@ dependencies = [
     # "rdkit",
 ]
 authors = [
-    {name = "Naomi", email = "naomi.pantillon@epfl.ch"}, 
-    {name = "Chloé", email = "chloe.baruselli@epfl.ch}, 
-    {name = "Cléa", email = "clea.pernet@epfl.ch"}, 
-    {name = "Monica", email = "monica.minazzo@epfl.ch}
+    {name = "Naomi", email = "naomi.pantillon@epfl.ch"} , 
+    {name = "Chloé", email = "chloe.baruselli@epfl.ch"} , 
+    {name = "Cléa", email = "clea.pernet@epfl.ch"} , 
+    {name = "Monica", email = "monica.minazzo@epfl.ch"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
