@@ -4,8 +4,30 @@ from rdkit import Chem #nao
 from rdkit.Chem import Draw #nao
 from rdkit.Chem import rdMolDescriptors #moni
 import random #moni
+import base64
 
 st.title("🎯 Aminoacid")
+
+def get_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+def set_background(png_file):
+    image = get_base64(png_file)
+    background = f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/png;base64,{image}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }}
+    </style>
+    """
+    st.markdown(background, unsafe_allow_html=True)
+set_background("aminoacid.png")
 
 if "page" not in st.session_state:
     st.session_state.page = "menu"
@@ -235,6 +257,17 @@ def name_quizz():
             st.rerun()
 
 def show_quizz():
+    st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: none;
+        background-color: #D4E6F1;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
     mode = st.radio("Select a game mode :", ["📗 Draw amino acids", "🖌 Name amino acids"])
     if mode == "📗 Draw amino acids":
         draw_quizz()
@@ -246,8 +279,19 @@ def show_learn():
     st.markdown("## 📚 Learn the amino acid")
     st.caption("What is the structure of a amino acid?") 
     st.write("An amino acid contains both amino and carboxylic acid functional groupe, a carbon alpha and a side chain which is variable."
-             "In nature you can only find the L-configuration of amino acids, therefore they will be drawn in this configuration."
+             " In nature you can only find the L-configuration of amino acids, therefore they will be drawn in this configuration."
              )
+    st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: none;
+        background-color: #D4E6F1;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
     img= "aastruct.jpeg"
     st.image(img, caption="Amino acid structure", use_container_width=True)
     st.write("Select an amino acid to view its molecular structure:") 
