@@ -382,7 +382,7 @@ def show_learn():
     """,
     unsafe_allow_html=True
 )
-    img= "aastruct.jpeg"
+    img= "../../assets/aastruct.jpeg"
     st.image(img, caption="Amino acid structure", use_container_width=True)
     st.write("Select an amino acid to view its molecular structure:") 
 
