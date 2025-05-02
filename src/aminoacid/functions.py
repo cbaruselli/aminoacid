@@ -384,7 +384,6 @@ def show_learn():
 )
     img= "../../assets/aastruct.jpeg"
     st.image(img, caption="Amino acid structure", use_container_width=True)
-    st.write("Select an amino acid to view its molecular structure:") 
 
     amino_acids = {
         "Glycine (Gly, G)": "C(C(=O)O)N",
@@ -408,14 +407,33 @@ def show_learn():
         "Histidine (His, H)": "N[C@@H](CC1=CN=CN1)C(=O)O",
         "Proline (Pro, P)": "C1C[C@H](NC1)C(=O)O"
         }
-# Dropdown menu where you can select the amino acids to be drawn.
-    selected_name = st.selectbox("Choose an amino acid:", list(amino_acids.keys()))
+    
+    st.title("Amino acid structure")
 
-    smiles = amino_acids[selected_name]
-    mol = Chem.MolFromSmiles(smiles)
-    img = Draw.MolToImage(mol, size=(400, 400))
-    st.image(img, caption=selected_name, use_container_width=False)
+    # Initialize session state
+    if "visible" not in st.session_state:
+        st.session_state.visible = {k: False for k in amino_acids}
+    
+    # Number of colums per row
+    columns_per_row = 4 
+    aa_items = list(amino_acids.items())
 
+    # Grid layout of buttons
+    for row_start in range(0, len(aa_items), columns_per_row):
+        cols = st.columns(columns_per_row)
+        for col, (name, smiles) in zip(cols, aa_items[row_start: row_start + columns_per_row]):
+            with col:
+                # Button with toggle behavior
+                if st.button(name, key=f"aa_{name}"):
+                    st.session_state.visible[name] = not st.session_state.visible[name]
+                
+                # Show molecule image (if toggled)
+                if st.session_state.visible[name]:
+                    mol = Chem.MolFromSmiles(smiles)
+                    img = Draw.MolToImage(mol, size=(400,400))
+                    st.image(img)
+                    
+    
     if st.button("🔙 Back to menu"):
         st.session_state.page = "menu"
         st.rerun()
