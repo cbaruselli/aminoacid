@@ -408,8 +408,9 @@ def show_learn():
         "Proline (Pro, P)": "C1C[C@H](NC1)C(=O)O"
         }
     
-    st.title("Amino acid structure")
-
+    st.markdown("### 🧬 Amino Acid Structures")
+    st.markdown("---")
+    
     # Initialize session state
     if "visible" not in st.session_state:
         st.session_state.visible = {k: False for k in amino_acids}
