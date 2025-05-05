@@ -42,7 +42,7 @@ def show_menu():
             st.rerun()
 
     with col2:
-        if st.button("📘 Learn the amino acid"):
+        if st.button("📘 Learn amino acids"):
             st.session_state.page = "learn"
             st.rerun()
 
@@ -368,7 +368,7 @@ def show_quizz():
 def show_learn():
     st.markdown("## 📚 Learn the amino acid")
     st.caption("What is the structure of a amino acid?") 
-    st.write("An amino acid contains both amino and carboxylic acid functional groupe, a carbon alpha and a side chain which is variable."
+    st.write("An amino acid contains both amino and carboxylic acid functional group, a carbon alpha and a side chain which is variable."
              " In nature you can only find the L-configuration of amino acids, therefore they will be drawn in this configuration."
              )
     st.markdown(
