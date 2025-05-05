@@ -8,10 +8,8 @@ import base64
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from data.aminoacidlist import amino_acids
-
-
+from data.aminoacidlist import aa_stereo
 
 st.title("🎯 Aminoacid")
 
@@ -348,29 +346,6 @@ def show_learn():
 )
     img= "../../assets/aastruct.jpeg"
     st.image(img, caption="Amino acid structure", use_container_width=True)
-
-    aa_stereo = {
-        "Glycine (Gly, G)": "C(C(=O)O)N",
-        "Alanine (Ala, A)": "C[C@@H](C(=O)O)N",
-        "Valine (Val, V)": "CC(C)[C@H](N)C(O)=O",
-        "Leucine (Leu, L)": "CC(C)C[C@@H](C(=O)O)N",
-        "Isoleucine (Ile, I)": "N[C@@H](C(C)CC)C(=O)O",
-        "Serine (Ser, S)": "N[C@@H](CO)C(=O)O",
-        "Threonine (Thr, T)": "C[C@H]([C@@H](C(=O)O)N)O",
-        "Cysteine (Cys, C)": "N[C@@H](CS)C(=O)O",
-        "Methionine (Met, M)": "N[C@@H](CCSC)C(=O)O",
-        "Phenylalanine (Phe, F)": "N[C@@H](CC1=CC=CC=C1)C(=O)O",
-        "Tyrosine (Tyr, Y)": "N[C@@H](CC1=CC=C(O)C=C1)C(=O)O",
-        "Tryptophan (Trp, W)": "N[C@@H](CC1=CNC2=CC=CC=C12)C(=O)O",
-        "Asparagine (Asn, N)": "N[C@@H](CC(=O)N)C(=O)O",
-        "Glutamine (Gln, Q)": "N[C@@H](CCC(=O)N)C(=O)O",
-        "Aspartic acid (Asp, D)": "N[C@@H](CC(=O)O)C(=O)O",
-        "Glutamic acid (Glu, E)": "N[C@@H](CCC(=O)O)C(=O)O",
-        "Lysine (Lys, K)": "N[C@@H](CCCCN)C(=O)O",
-        "Arginine (Arg, R)": "N[C@@H](CCCNC(=N)N)C(=O)O",
-        "Histidine (His, H)": "N[C@@H](CC1=CN=CN1)C(=O)O",
-        "Proline (Pro, P)": "C1C[C@H](NC1)C(=O)O"
-        }
     
     st.markdown("### 🧬 Amino Acid Structures")
     st.markdown("---")
@@ -386,9 +361,12 @@ def show_learn():
     # Grid layout of buttons
     for row_start in range(0, len(aa_items), columns_per_row):
         cols = st.columns(columns_per_row)
-        for col, (name, smiles) in zip(cols, aa_items[row_start: row_start + columns_per_row]):
+        row_items = aa_items[row_start: row_start + columns_per_row]
+        for i in range(len(row_items)):
+            col = cols[i]
+            name, smiles = row_items[i]
             with col:
-                # Button with toggle behavior
+                # Button (with toggle behavior)
                 if st.button(name, key=f"aa_{name}"):
                     st.session_state.visible[name] = not st.session_state.visible[name]
                 
