@@ -5,6 +5,13 @@ from rdkit.Chem import Draw #nao
 from rdkit.Chem import rdMolDescriptors #moni
 import random #moni
 import base64
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from data.aminoacidlist import amino_acids
+
+
 
 st.title("🎯 Aminoacid")
 
@@ -52,29 +59,7 @@ def draw_quizz():
     st.markdown("---")
 
     # Step 1: Define your amino acids
-    amino_acids = {
-        "Alanine": "CC(C(=O)O)N",
-        "Arginine": "NC(CCCNC(=N)N)C(=O)O",
-        "Asparagine": "C(CC(=O)N)(C(=O)O)N",
-        "Aspartic Acid": "NC(C(=O)O)CC(=O)O",
-        "Cysteine": "C(C(C(=O)O)N)S",
-        "Glutamic Acid": "C(CCC(=O)O)(C(=O)O)N",
-        "Glutamine": "C(CCC(=O)N)(C(=O)O)N",
-        "Glycine": "NCC(=O)O",
-        "Histidine": "NC(C(=O)O)Cc1c[nH]cn1",
-        "Isoleucine": "CCC(C)C(C(=O)O)N",
-        "Leucine": "CC(C)CC(C(=O)O)N",
-        "Lysine": "NC(CCCCN)C(=O)O",
-        "Methionine": "CSCCC(C(=O)O)N",
-        "Phenylalanine": "NC(Cc1ccccc1)C(=O)O",
-        "Proline": "O=C(O)C1CCCN1",
-        "Serine": "C(C(C(=O)O)N)O",
-        "Threonine": "CC(C(C(=O)O)N)O",
-        "Tryptophan": "NC(Cc1c[nH]c2ccccc12)C(=O)O",
-        "Tyrosine": "NC(Cc1ccc(O)cc1)C(=O)O",
-        "Valine": "CC(C)C(C(=O)O)N"
-    }
-
+    
     # Step 2: Initialize session state 
     if "round_order" not in st.session_state:
         st.session_state.round_order = random.sample(list(amino_acids.keys()), len(amino_acids))  # shuffle once
@@ -197,28 +182,7 @@ def name_quizz():
     st.markdown("## ✏️ Quizz : Name amino acids")
     st.write("Guess the name of the amino acid based on their structure.")
 
-    amino_acids = {
-        "Alanine": "CC(C(=O)O)N",
-        "Arginine": "NC(CCCNC(=N)N)C(=O)O",
-        "Asparagine": "C(CC(=O)N)(C(=O)O)N",
-        "Aspartic Acid": "NC(C(=O)O)CC(=O)O",
-        "Cysteine": "C(C(C(=O)O)N)S",
-        "Glutamic Acid": "C(CCC(=O)O)(C(=O)O)N",
-        "Glutamine": "C(CCC(=O)N)(C(=O)O)N",
-        "Glycine": "NCC(=O)O",
-        "Histidine": "NC(C(=O)O)Cc1c[nH]cn1",
-        "Isoleucine": "CCC(C)C(C(=O)O)N",
-        "Leucine": "CC(C)CC(C(=O)O)N",
-        "Lysine": "NC(CCCCN)C(=O)O",
-        "Methionine": "CSCCC(C(=O)O)N",
-        "Phenylalanine": "NC(Cc1ccccc1)C(=O)O",
-        "Proline": "O=C(O)C1CCCN1",
-        "Serine": "C(C(C(=O)O)N)O",
-        "Threonine": "CC(C(C(=O)O)N)O",
-        "Tryptophan": "NC(Cc1c[nH]c2ccccc12)C(=O)O",
-        "Tyrosine": "NC(Cc1ccc(O)cc1)C(=O)O",
-        "Valine": "CC(C)C(C(=O)O)N"
-    }
+
     #Creation of session state
     if "name_quizz_order" not in st.session_state:
         st.session_state.name_quizz_order = random.sample(list(amino_acids.items()), len(amino_acids))
@@ -385,7 +349,7 @@ def show_learn():
     img= "../../assets/aastruct.jpeg"
     st.image(img, caption="Amino acid structure", use_container_width=True)
 
-    amino_acids = {
+    aa_stereo = {
         "Glycine (Gly, G)": "C(C(=O)O)N",
         "Alanine (Ala, A)": "C[C@@H](C(=O)O)N",
         "Valine (Val, V)": "CC(C)[C@H](N)C(O)=O",
@@ -413,11 +377,11 @@ def show_learn():
     
     # Initialize session state
     if "visible" not in st.session_state:
-        st.session_state.visible = {k: False for k in amino_acids}
+        st.session_state.visible = {k: False for k in aa_stereo}
     
     # Number of colums per row
     columns_per_row = 4 
-    aa_items = list(amino_acids.items())
+    aa_items = list(aa_stereo.items())
 
     # Grid layout of buttons
     for row_start in range(0, len(aa_items), columns_per_row):
