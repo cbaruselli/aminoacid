@@ -59,8 +59,17 @@ def draw_quizz():
     # Step 1: Define your amino acids
     
     # Step 2: Initialize session state 
+    if "retry_mode" not in st.session_state:
+        st.session_state.retry_mode = False
+    if "incorrect_answers" not in st.session_state:
+        st.session_state.incorrect_answers = []
+    if "retry_used" not in st.session_state:
+        st.session_state.retry_used = False
     if "round_order" not in st.session_state:
-        st.session_state.round_order = random.sample(list(amino_acids.keys()), len(amino_acids))  # shuffle once
+        st.session_state.round_order = random.sample(
+            st.session_state.incorrect_answers if st.session_state.retry_mode else list(amino_acids.keys()),
+            len(st.session_state.incorrect_answers) if st.session_state.retry_mode else len(amino_acids)
+        )
     if "ketcher_key" not in st.session_state:
         st.session_state.ketcher_key = 0
     if "current_index" not in st.session_state:
@@ -69,83 +78,117 @@ def draw_quizz():
         st.session_state.score = 0
     if "answered" not in st.session_state:
         st.session_state.answered = False
+    if "show_score_clicked" not in st.session_state:
+        st.session_state.show_score_clicked = False
 
     # Step 3: Set current target
     current_target = st.session_state.round_order[st.session_state.current_index]
     target_smiles = amino_acids[current_target]
 
+    total_questions = len(st.session_state.round_order)
+
+    # Show score button logic
+    if st.session_state.current_index == total_questions - 1 and not st.session_state.show_score_clicked:
+        if st.button("Show score"):
+            st.session_state.show_score_clicked = True
+            st.session_state.answered = False
+            st.rerun()
+
     # Step 4: Display game info and progress bar
-    st.markdown(f"Draw this amino acid in the box below: **{current_target}**")
-    st.markdown("Once you are done, click **Apply** to see if it's correct!")
-    st.markdown("And move on to the next question with **Next**.")
-    progress = (st.session_state.current_index + 1) / len(amino_acids)
-    st.progress(progress, text= f"Progress : {st.session_state.current_index + 1} / {len(amino_acids)}")
+    # Main quiz interface
+    if not st.session_state.show_score_clicked:
+        st.markdown(f"Draw this amino acid in the box below: **{current_target}**")
+        st.markdown("Once you are done, click **Apply** to see if it's correct!")
+        st.markdown("And move on to the next question with **Next**.")
+
+        progress = (st.session_state.current_index + 1) / total_questions
+        st.progress(progress, text=f"Progress : {st.session_state.current_index + 1} / {total_questions}")
 
     # Step 5: User draws molecule
-    if not st.session_state.answered:
-        ketcher_smiles = st_ketcher(height=600, key=f"ketcher_{st.session_state.ketcher_key}")
-    else:
-        st.info("You already answered! Click **Next** to continue.")
-        ketcher_smiles = None
+        if not st.session_state.answered:
+            ketcher_smiles = st_ketcher(height=600, key=f"ketcher_{st.session_state.ketcher_key}")
+        else:
+            st.info("You already answered! Click **Next** to continue.")
+            ketcher_smiles = None
     
 
     # Step 6: Normalize and compare molecules
-    def are_equivalent(smiles1, smiles2):
-        mol1 = Chem.MolFromSmiles(smiles1)
-        mol2 = Chem.MolFromSmiles(smiles2)
-        if mol1 is None or mol2 is None:
-            return False
-        return Chem.MolToInchi(mol1) == Chem.MolToInchi(mol2)
+        def are_equivalent(smiles1, smiles2):
+            mol1 = Chem.MolFromSmiles(smiles1)
+            mol2 = Chem.MolFromSmiles(smiles2)
+            if mol1 is None or mol2 is None:
+                return False
+            return Chem.MolToInchi(mol1) == Chem.MolToInchi(mol2)
 
     # Step 7: Feedback
-    if ketcher_smiles:
-        if are_equivalent(ketcher_smiles, target_smiles):
-            st.success("✅ Correct!")
-            st.markdown("---")
-            if "answered" not in st.session_state or not st.session_state.answered:
-                st.session_state.score += 1
-                st.session_state.answered = True
-        else:
-            st.error("❌ Not quite right. Keep on training!")
-            st.session_state.answered = True
-            st.markdown(f"The answer is : " )
-            mol = Chem.MolFromSmiles(target_smiles)
-            if mol:
-                img = Draw.MolToImage(mol, size=(300, 300))
-                st.image(img, caption=f"Structure of {current_target}", use_container_width=False)
+        if ketcher_smiles:
+            if are_equivalent(ketcher_smiles, target_smiles):
+                st.success("✅ Correct!")
+                st.markdown("---")
+                if not st.session_state.answered:
+                    st.session_state.score += 1
+                    st.session_state.answered = True
             else:
-                st.warning("Impossible to generate the molecule from SMILES.")
-            st.markdown("---")
+                st.error("❌ Not quite right. Keep on training!")
+                st.session_state.answered = True
+
+                if current_target not in st.session_state.incorrect_answers:
+                    st.session_state.incorrect_answers.append(current_target)
+
+                st.markdown(f"The answer is : ")
+                mol = Chem.MolFromSmiles(target_smiles)
+                if mol:
+                    img = Draw.MolToImage(mol, size=(300, 300))
+                    st.image(img, caption=f"Structure of {current_target}", use_container_width=False)
+                else:
+                    st.warning("Impossible to generate the molecule from SMILES.")
+                st.markdown("---")
 
     # Step 8: Go to next
-    if st.session_state.current_index < len(amino_acids) - 1:
-        if st.button("Next"):
-            st.session_state.current_index += 1
-            st.session_state.ketcher_key += 1  # Trigger Ketcher reset
-            st.session_state.answered = False
-            st.rerun()  # refresh app state
-    elif st.session_state.current_index == len(amino_acids) - 1:
-        if st.button("Show score"):
-            st.header("🏁 Round Complete!")
-            percent_score = (st.session_state.score / len(amino_acids)) * 100
-            st.success(f"Your final score is : {st.session_state.score} / {len(amino_acids)}")
-            if percent_score == 100:
-                st.balloons()
-                st.markdown("🎉 You're an amino acid expert !")
-            elif percent_score >= 75:
-                st.markdown("Great job 👏 : You know your stuff !")
-            elif percent_score >= 50:
-                st.markdown("🧪 Keep practicing and you'll get there.")
-            else:
-                st.markdown("📚 It's time to hit the books, don't give up !")
-            st.markdown("---")
-        if st.button("Restart"):
-            keys_to_clear = ["current_index", "ketcher_key", "score", "answered", "round_order"]
-            for key in keys_to_clear:
-                if key in st.session_state:
-                    del st.session_state[key]
-            st.rerun()
+        if st.session_state.current_index < total_questions - 1:
+            if st.button("Next"):
+                st.session_state.current_index += 1
+                st.session_state.ketcher_key += 1
+                st.session_state.answered = False
+                st.rerun()
+    # Show final score UI
+    if st.session_state.show_score_clicked:
+        st.header("🏁 Round Complete!")
+        percent_score = (st.session_state.score / total_questions) * 100
+        st.success(f"Your final score is : {st.session_state.score} / {total_questions}")
 
+        if percent_score == 100:
+            st.balloons()
+            st.markdown("🎉 You're an amino acid expert !")
+        elif percent_score >= 75:
+            st.markdown("Great job 👏 : You know your stuff !")
+        elif percent_score >= 50:
+            st.markdown("🧪 Keep practicing and you'll get there.")
+        else:
+            st.markdown("📚 It's time to hit the books, don't give up !")
+        st.markdown("---")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Restart"):
+                for key in ["current_index", "ketcher_key", "score", "answered", "round_order", "retry_mode", "incorrect_answers", "retry_used", "show_score_clicked"]:
+                    if key in st.session_state:
+                        del st.session_state[key]
+                st.rerun()
+
+        with col2:
+            if not st.session_state.retry_used and st.session_state.incorrect_answers:
+                if st.button("Retry Mistakes"):
+                    st.session_state.retry_mode = True
+                    st.session_state.retry_used = True
+                    st.session_state.round_order = random.sample(
+                        st.session_state.incorrect_answers, len(st.session_state.incorrect_answers)
+                    )
+                    st.session_state.current_index = 0
+                    st.session_state.score = 0
+                    st.session_state.answered = False
+                    st.session_state.show_score_clicked = False
+                    st.rerun()
 
     if st.button("🔙 Back to menu"):
         st.session_state.page = "menu"
