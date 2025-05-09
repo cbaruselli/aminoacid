@@ -26,7 +26,6 @@ def set_background(png_file):
         background-image: url("data:image/png;base64,{image}");
         background-size: cover;
         background-position: center;
-        background-repeat: no-repeat;
         background-attachment: fixed;
     }}
     </style>
@@ -55,16 +54,12 @@ def draw_quizz():
     st.markdown("## 🎮 Quizz : Draw amino acids")
     st.write("Let's test your knowledge!")
     st.markdown("---")
-
-    # Step 1: Define your amino acids
     
-    # Step 2: Initialize session state 
+    # Initialize session state 
     if "retry_mode" not in st.session_state:
         st.session_state.retry_mode = False
     if "incorrect_answers" not in st.session_state:
         st.session_state.incorrect_answers = []
-    if "retry_used" not in st.session_state:
-        st.session_state.retry_used = False
     if "round_order" not in st.session_state:
         st.session_state.round_order = random.sample(
             st.session_state.incorrect_answers if st.session_state.retry_mode else list(amino_acids.keys()),
@@ -81,20 +76,13 @@ def draw_quizz():
     if "show_score_clicked" not in st.session_state:
         st.session_state.show_score_clicked = False
 
-    # Step 3: Set current target
+    # Set current target
     current_target = st.session_state.round_order[st.session_state.current_index]
     target_smiles = amino_acids[current_target]
 
     total_questions = len(st.session_state.round_order)
 
-    # Show score button logic
-    if st.session_state.current_index == total_questions - 1 and not st.session_state.show_score_clicked:
-        if st.button("Show score"):
-            st.session_state.show_score_clicked = True
-            st.session_state.answered = False
-            st.rerun()
-
-    # Step 4: Display game info and progress bar
+    # Display game info and progress bar
     # Main quiz interface
     if not st.session_state.show_score_clicked:
         st.markdown(f"Draw this amino acid in the box below: **{current_target}**")
@@ -104,7 +92,7 @@ def draw_quizz():
         progress = (st.session_state.current_index + 1) / total_questions
         st.progress(progress, text=f"Progress : {st.session_state.current_index + 1} / {total_questions}")
 
-    # Step 5: User draws molecule
+    # draw the molecules
         if not st.session_state.answered:
             ketcher_smiles = st_ketcher(height=600, key=f"ketcher_{st.session_state.ketcher_key}")
         else:
@@ -112,7 +100,7 @@ def draw_quizz():
             ketcher_smiles = None
     
 
-    # Step 6: Normalize and compare molecules
+    # Comparaison of the molecules
         def are_equivalent(smiles1, smiles2):
             mol1 = Chem.MolFromSmiles(smiles1)
             mol2 = Chem.MolFromSmiles(smiles2)
@@ -120,7 +108,7 @@ def draw_quizz():
                 return False
             return Chem.MolToInchi(mol1) == Chem.MolToInchi(mol2)
 
-    # Step 7: Feedback
+    # Feedback
         if ketcher_smiles:
             if are_equivalent(ketcher_smiles, target_smiles):
                 st.success("✅ Correct!")
@@ -144,13 +132,28 @@ def draw_quizz():
                     st.warning("Impossible to generate the molecule from SMILES.")
                 st.markdown("---")
 
-    # Step 8: Go to next
+    # Go to next molecule
         if st.session_state.current_index < total_questions - 1:
             if st.button("Next"):
+                if not st.session_state.answered: 
+                     if current_target not in st.session_state.incorrect_answers:
+                        st.session_state.incorrect_answers.append(current_target)
                 st.session_state.current_index += 1
                 st.session_state.ketcher_key += 1
                 st.session_state.answered = False
                 st.rerun()
+
+    # Show score button logic
+    if st.session_state.current_index == total_questions - 1 and not st.session_state.show_score_clicked:
+        if st.button("Show score"):
+            if not st.session_state.answered: 
+                     if current_target not in st.session_state.incorrect_answers:
+                        st.session_state.incorrect_answers.append(current_target)
+            st.session_state.show_score_clicked = True
+            st.session_state.answered = False
+            st.rerun()
+      
+
     # Show final score UI
     if st.session_state.show_score_clicked:
         st.header("🏁 Round Complete!")
@@ -171,16 +174,15 @@ def draw_quizz():
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Restart"):
-                for key in ["current_index", "ketcher_key", "score", "answered", "round_order", "retry_mode", "incorrect_answers", "retry_used", "show_score_clicked"]:
+                for key in ["current_index", "ketcher_key", "score", "answered", "round_order", "retry_mode", "incorrect_answers", "show_score_clicked"]:
                     if key in st.session_state:
                         del st.session_state[key]
                 st.rerun()
 
         with col2:
-            if not st.session_state.retry_used and st.session_state.incorrect_answers:
+            if st.session_state.incorrect_answers:
                 if st.button("Retry Mistakes"):
                     st.session_state.retry_mode = True
-                    st.session_state.retry_used = True
                     st.session_state.round_order = random.sample(
                         st.session_state.incorrect_answers, len(st.session_state.incorrect_answers)
                     )
@@ -188,11 +190,13 @@ def draw_quizz():
                     st.session_state.score = 0
                     st.session_state.answered = False
                     st.session_state.show_score_clicked = False
+                    st.session_state.incorrect_answers = []
                     st.rerun()
 
     if st.button("🔙 Back to menu"):
         st.session_state.page = "menu"
         st.rerun()
+
 
 def reset_quizz(quizz_variables=[]):
     '''
