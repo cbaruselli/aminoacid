@@ -375,6 +375,11 @@ def show_quizz():
  
 
 def show_learn():
+    """
+    Displays text and an image about the structure of amino acids.
+
+    Displays a grid layout of buttons with toggle behavior which shows or hides the image of an amino acid drawing. 
+    """
     st.markdown("## 📚 Learn the amino acid")
     st.caption("What is the structure of a amino acid?") 
     st.write("An amino acid contains both amino and carboxylic acid functional group, a carbon alpha and a side chain which is variable."
@@ -397,11 +402,10 @@ def show_learn():
     st.markdown("### 🧬 Amino Acid Structures")
     st.markdown("---")
     
-    # Initialize session state
+    # Initialization of session state visible
     if "visible" not in st.session_state:
         st.session_state.visible = {k: False for k in aa_stereo}
     
-    # Number of colums per row
     columns_per_row = 4 
     aa_items = list(aa_stereo.items())
 
@@ -413,11 +417,11 @@ def show_learn():
             col = cols[i]
             name, smiles = row_items[i]
             with col:
-                # Button (with toggle behavior)
+                # Button with toggle behavior
                 if st.button(name, key=f"aa_{name}"):
                     st.session_state.visible[name] = not st.session_state.visible[name]
                 
-                # Show molecule image (if toggled)
+                # Show molecule drawing as an image 
                 if st.session_state.visible[name]:
                     mol = Chem.MolFromSmiles(smiles)
                     img = Draw.MolToImage(mol, size=(400,400))
