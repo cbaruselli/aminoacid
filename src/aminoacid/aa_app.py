@@ -202,7 +202,7 @@ def reset_quizz(quizz_variables=[]):
     '''
     To reset the sessions after finishing it.
     
-    Input: list with object by default. 
+    Input: list with object by default 
     '''
     quizz_variables = quizz_variables or [
         'name_quizz_order',
@@ -293,7 +293,11 @@ def name_quizz():
         st.success("🏁 You've completed all the amino acids!")
         retry_mode = st.session_state.get("retry_mode", False) #To see if retry_mode is active or not
 
-        tot_questions= len(st.session_state.name_quizz_order) if retry_mode else len(amino_acids) #Adapt the nb of total questions depending on the mode
+        if retry_mode:  #Adapt the nb of total questions depending on the mode
+            tot_questions = len(st.session_state.name_quizz_order)  
+        else:
+            tot_questions = len(amino_acids) #Adapt the nb of total questions depending on the mode
+       
         percent_score = (st.session_state.name_quizz_score / tot_questions) * 100
 
         if percent_score == 100:
@@ -323,7 +327,7 @@ def name_quizz():
                 st.markdown("📚 It's time to hit the books, don't give up !")
         st.markdown("---")
 
-        #Practice the wrong aminoacids
+        #To practice the wrong aminoacids
         if st.session_state.wrong_answers:
             st.warning(f"You missed {len(st.session_state.wrong_answers)} amino acids !")
 
@@ -354,7 +358,7 @@ def name_quizz():
 
 def show_quizz():
     '''
-    Allows you to choose which game mode you want between 'Draw amino acids' and 'Name amino acids'.
+    Allows you to choose between two games modes; 'Draw amino acids' and 'Name amino acids'.
     '''
     st.markdown(
     """
