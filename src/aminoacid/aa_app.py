@@ -200,9 +200,9 @@ def draw_quizz():
 
 def reset_quizz(quizz_variables=[]):
     '''
-    To reset the sessions after finishing it.
+    Used to update a new state.
     
-    Input: list with object by default 
+    Input: use a list of variables or a default if None and proceed to erase associated attributes on session_state if defined.
     '''
     quizz_variables = quizz_variables or [
         'name_quizz_order',
@@ -215,8 +215,8 @@ def reset_quizz(quizz_variables=[]):
         ]
     
     for variable in quizz_variables:
-        if hasattr(st.session_state, variable):
-            del st.session_state[variable]
+        if hasattr(st.session_state, variable):  #check if session_state has attribute "variable"
+            del st.session_state[variable]      #if it's the case, delete to reset the interface
 
 
 def name_quizz():
