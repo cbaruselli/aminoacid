@@ -1,9 +1,8 @@
 import streamlit as st
-from streamlit_ketcher import st_ketcher #moni
-from rdkit import Chem #nao
-from rdkit.Chem import Draw #nao
-from rdkit.Chem import rdMolDescriptors #moni
-import random #moni
+from streamlit_ketcher import st_ketcher 
+from rdkit import Chem 
+from rdkit.Chem import Draw 
+import random 
 import base64
 import sys
 import os
@@ -14,11 +13,33 @@ from data.aminoacidlist import aa_stereo
 st.title("🎯 Aminoacid")
 
 def get_base64(file):
+    """
+    Read the file and encode its content in base64
+
+    Parameter:
+    file (str) : path to the file to be encoded
+
+    Return:
+    str: the file encoded in base64
+
+    """
     with open(file, "rb") as f:
         data = f.read()
     return base64.b64encode(data).decode()
 
 def set_background(png_file):
+    """
+    Set the background image for a Streamlit app 
+
+    The function read the png image, call get_base64 to encode the image in base64 and put the image as the background
+
+    Parameters:
+    file (str) : path to the file to be used for the background 
+
+    Returns:
+    None
+
+    """
     image = get_base64(png_file)
     background = f"""
     <style>
