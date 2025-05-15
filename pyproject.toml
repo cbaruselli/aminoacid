@@ -9,7 +9,9 @@ requires-python = ">=3.10"
 license = {file = "LICENSE"}
 description = "A game to learn amino acids"
 dependencies = [
-    # "rdkit",
+    "rdkit",
+    "streamlit==1.44.1",
+    "streamlit-ketcher==0.0.1", 
 ]
 authors = [
     {name = "Naomi", email = "naomi.pantillon@epfl.ch"} , 
@@ -32,8 +34,8 @@ classifiers = [
 dynamic = ["version"]
 
 [project.urls]
-source = "https://github.com/NaomiPant/aminoacid"
-tracker = "https://github.com/NaomiPant/aminoacid/issues"
+source = "https://github.com/cbaruselli/aminoacid"
+tracker = "https://github.com/cbaruselli/aminoacid/issues"
 
 [project.optional-dependencies]
 test = [
