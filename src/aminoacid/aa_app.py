@@ -52,7 +52,8 @@ def set_background(png_file):
     </style>
     """
     st.markdown(background, unsafe_allow_html=True)
-set_background("../../assets/aminoacid2.png")
+if __name__ == "__main__":
+    set_background("../../assets/aminoacid2.png")
 
 if "page" not in st.session_state:
     st.session_state.page = "menu"
