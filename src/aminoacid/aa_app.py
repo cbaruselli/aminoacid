@@ -12,6 +12,14 @@ from data.aminoacidlist import aa_stereo
 
 st.title("🎯 Aminoacid")
 
+# Comparaison of the molecules
+def are_equivalent(smiles1, smiles2):
+    mol1 = Chem.MolFromSmiles(smiles1)
+    mol2 = Chem.MolFromSmiles(smiles2)
+    if mol1 is None or mol2 is None:
+        return False
+    return Chem.MolToInchi(mol1) == Chem.MolToInchi(mol2)
+
 def get_base64(file):
     """
     Read the file and encode its content in base64
