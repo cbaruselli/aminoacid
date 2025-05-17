@@ -12,8 +12,16 @@ from data.aminoacidlist import aa_stereo
 
 st.title("🎯 Aminoacid")
 
-# Comparaison of the molecules
 def are_equivalent(smiles1, smiles2):
+    """"
+    Compares the structure of 2 molecules
+
+    Input:
+    2 smiles (str) : smiles1 and smiles2, to be compared
+
+    Return:
+    bool : True if both smiles are equivalent, False otherwise
+    """
     mol1 = Chem.MolFromSmiles(smiles1)
     mol2 = Chem.MolFromSmiles(smiles2)
     if mol1 is None or mol2 is None:
@@ -22,9 +30,9 @@ def are_equivalent(smiles1, smiles2):
 
 def get_base64(file):
     """
-    Read the file and encode its content in base64
+    Reads the file and encode its content in base64
 
-    Parameter:
+    Input:
     file (str) : path to the file to be encoded
 
     Return:
@@ -37,14 +45,13 @@ def get_base64(file):
 
 def set_background(png_file):
     """
-    Set the background image for a Streamlit app 
+    Sets the background image for a Streamlit app 
+    The function reads the png image, calls get_base64 to encode the image in base64 and puts the image as the background
 
-    The function read the png image, call get_base64 to encode the image in base64 and put the image as the background
-
-    Parameters:
+    Input:
     file (str) : path to the file to be used for the background 
 
-    Returns:
+    Return:
     None
 
     """
@@ -67,6 +74,16 @@ if "page" not in st.session_state:
     st.session_state.page = "menu"
 
 def show_menu():
+    """
+    Displays the home page of the web app
+
+    Input:
+    None
+
+    Return:
+    None
+    
+    """
     st.markdown("## What do you want to do ?")
     col1, col2 = st.columns(2)
 
@@ -81,6 +98,16 @@ def show_menu():
             st.rerun()
 
 def draw_quizz():
+    """
+    Defines the drawing game mode
+
+    Input:
+    None
+
+    Return:
+    None
+    """
+
     st.markdown("## 🎮 Quizz : Draw amino acids")
     st.write("Let's test your knowledge!")
     st.markdown("---")
@@ -122,22 +149,13 @@ def draw_quizz():
         progress = (st.session_state.current_index + 1) / total_questions
         st.progress(progress, text=f"Progress : {st.session_state.current_index + 1} / {total_questions}")
 
-    # draw the molecules
+    # Drawing the molecule
         if not st.session_state.answered:
             ketcher_smiles = st_ketcher(height=600, key=f"ketcher_{st.session_state.ketcher_key}")
         else:
             st.info("You already answered! Click **Next** to continue.")
             ketcher_smiles = None
     
-
-    # Comparaison of the molecules
-        def are_equivalent(smiles1, smiles2):
-            mol1 = Chem.MolFromSmiles(smiles1)
-            mol2 = Chem.MolFromSmiles(smiles2)
-            if mol1 is None or mol2 is None:
-                return False
-            return Chem.MolToInchi(mol1) == Chem.MolToInchi(mol2)
-
     # Feedback
         if ketcher_smiles:
             if are_equivalent(ketcher_smiles, target_smiles):
@@ -183,7 +201,6 @@ def draw_quizz():
             st.session_state.answered = False
             st.rerun()
       
-
     # Show final score UI
     if st.session_state.show_score_clicked:
         st.header("🏁 Round Complete!")
@@ -230,9 +247,12 @@ def draw_quizz():
 
 def reset_quizz(quizz_variables=[]):
     '''
-    Used to update a new state.
+    Used to update a new state
     
-    Input: use a list of variables or a default if None and proceed to erase associated attributes on session_state if defined.
+    Input: uses a list of variables or a default if None and proceeds to erase associated attributes on session_state if defined
+
+    Return:
+    None
     '''
     quizz_variables = quizz_variables or [
         'name_quizz_order',
@@ -251,7 +271,13 @@ def reset_quizz(quizz_variables=[]):
 
 def name_quizz():
     '''
-    Function used to write the name of the amino acid from its structure.
+    Function used to write the name of the amino acid from its structure
+
+    Input: 
+    None
+
+    Return:
+    None
     '''
 
     st.markdown("## ✏️ Quizz : Name amino acids")
@@ -388,7 +414,13 @@ def name_quizz():
 
 def show_quizz():
     '''
-    Allows you to choose between two games modes; 'Draw amino acids' and 'Name amino acids'.
+    Allows you to choose between two games modes; 'Draw amino acids' and 'Name amino acids'
+
+    Input:
+    None
+
+    Return:
+    None
     '''
     st.markdown(
     """
@@ -410,9 +442,14 @@ def show_quizz():
 
 def show_learn():
     """
-    Displays text and an image about the structure of amino acids.
+    Displays text and an image for the structure of amino acids
+    Displays a grid layout of buttons with toggle behavior which shows or hides the image of an amino acid structure
 
-    Displays a grid layout of buttons with toggle behavior which shows or hides the image of an amino acid drawing. 
+    Input:
+    None
+
+    Return:
+    None
     """
     st.markdown("## 📚 Learn the amino acid")
     st.caption("What is the structure of a amino acid?") 
