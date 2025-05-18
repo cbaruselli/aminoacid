@@ -11,7 +11,7 @@ Aminoacid
 <br>
 
 
-Aminoacid is an interactive game divided in two parts. The first one allows you to learn the structure of the 20 aminoacids and then test your knowledge with the game.
+Aminoacid is an interactive game divided in two parts. The first one allows you to learn the structure of the 20 aminoacids and then test your knowledge with the game with two functionalities. One allows you to draw amino acids from their name and the other for naming amino acids according to their structure.
 
 ## 🔥 Usage
 
