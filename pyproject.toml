@@ -9,7 +9,8 @@ requires-python = ">=3.10"
 license = {file = "LICENSE"}
 description = "A game to learn amino acids"
 dependencies = [
-    "rdkit==2022.9.5",
+    "rdkit",
+    "numpy==1.26.4",
     "streamlit==1.44.1",
     "streamlit-ketcher==0.0.1", 
 ]
