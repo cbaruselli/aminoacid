@@ -57,7 +57,11 @@ The package requires other dependencies to run. The file "requirements.txt" list
 ```
 pip install -r requirements.txt
 ```
+In order to open the streamlit interface, run the following commands in "projet" environment:
 
+```
+streamlit run aa_app.py
+```
 
 ### Run tests and coverage
 
