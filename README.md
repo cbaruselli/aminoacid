@@ -13,18 +13,6 @@ Aminoacid
 
 Aminoacid is an interactive game divided in two parts. The first one allows you to learn the structure of the 20 aminoacids and then test your knowledge with the game with two functionalities. One allows you to draw amino acids from their name and the other for naming amino acids according to their structure.
 
-## 🔥 Usage
-
-```python
-from mypackage import main_func
-
-# One line to rule them all
-result = main_func(data)
-```
-
-This usage example shows how to quickly leverage the package's main functionality with just one line of code (or a few lines of code). 
-After importing the `main_func` (to be renamed by you), you simply pass in your `data` and get the `result` (this is just an example, your package might have other inputs and outputs). 
-Short and sweet, but the real power lies in the detailed documentation.
 
 ## 👩‍💻 Installation
 
@@ -57,13 +45,13 @@ The package requires other dependencies to run. The file "requirements.txt" list
 ```
 pip install -r requirements.txt
 ```
-In order to open the streamlit interface, run the following commands in "projet" environment:
+In order to open the streamlit interface, run the following commands in "aminoacid" environment:
 
 ```
 streamlit run aa_app.py
 ```
 
-### Run tests and coverage
+## Run tests and coverage
 
 ```
 pip install tox
