@@ -12,14 +12,6 @@ aminoacid.aa\_app module
    :undoc-members:
    :show-inheritance:
 
-aminoacid.example\_module module
---------------------------------
-
-.. automodule:: aminoacid.example_module
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 
