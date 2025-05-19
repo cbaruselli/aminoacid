@@ -10,7 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 from data.aminoacidlist import amino_acids
 from data.aminoacidlist import aa_stereo
 
-st.title("🎯 Aminoacid")
+st.title("🧬 Aminoacid")
 
 def are_equivalent(smiles1, smiles2):
     """"
