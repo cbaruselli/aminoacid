@@ -57,6 +57,12 @@ streamlit run aa_app.py
 pip install tox
 tox
 ```
+If there is an error because of some dependencies issues, write the following commands:
+
+```
+pip install "pyproject-api<1.9"
+pip install "packaging<25"
+```
 
 ## 📖 Autors 
 
