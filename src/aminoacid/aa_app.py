@@ -9,6 +9,10 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from data.aminoacidlist import amino_acids
 from data.aminoacidlist import aa_stereo
+from pathlib import Path
+
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+ASSETS_DIR = _PROJECT_ROOT / "assets"
 
 st.title("🧬 Aminoacid")
 
@@ -68,7 +72,7 @@ def set_background(png_file):
     """
     st.markdown(background, unsafe_allow_html=True)
 if __name__ == "__main__":
-    set_background("../../assets/aminoacid2.png")
+    set_background(ASSETS_DIR / "aminoacid2.png")
 
 if "page" not in st.session_state:
     st.session_state.page = "menu"
@@ -467,7 +471,7 @@ def show_learn():
     """,
     unsafe_allow_html=True
 )
-    img= "../../assets/aastruct.jpeg"
+    img= ASSETS_DIR / "aastruct.jpeg"
     st.image(img, caption="Amino acid structure", use_container_width=True)
     
     st.markdown("### 🧬 Amino Acid Structures")
