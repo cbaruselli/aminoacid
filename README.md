@@ -32,6 +32,12 @@ The package can be clone on your local machine using the following command lines
 git clone https://github.com/cbaruselli/aminoacid.git
 ```
 
+Change the current directory:
+
+```
+cd aminoacid
+```
+
 Then, to install the package, you can run:
 
 ```
@@ -50,7 +56,7 @@ pip install -r requirements.txt
 In order to open the streamlit interface, run the following commands in "aminoacid" environment:
 
 ```
-streamlit run aa_app.py
+streamlit run src/aminoacid/aa_app.py
 ```
 
 ## 📈 Run tests and coverage
