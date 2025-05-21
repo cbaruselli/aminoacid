@@ -73,7 +73,7 @@ pip install "pyproject-api<1.9"
 pip install "packaging<25"
 ```
 
-## 📖 Autors 
+## 📖 Authors 
 
 Chloé Baruselli: https://github.com/cbaruselli (function name_quizz(), report, READme)
 
