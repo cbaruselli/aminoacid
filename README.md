@@ -57,6 +57,8 @@ streamlit run aa_app.py
 pip install tox
 tox
 ```
+## Streamlit
+
 If there is an error because of some dependencies issues, write the following commands:
 
 ```
@@ -66,10 +68,10 @@ pip install "packaging<25"
 
 ## 📖 Autors 
 
-Chloé Baruselli: https://github.com/cbaruselli 
+Chloé Baruselli: https://github.com/cbaruselli (function name_quizz(), report, READme)
 
-Monica Minazzo: https://github.com/mminazzo 
+Monica Minazzo: https://github.com/mminazzo (function draw_quizz(), report)
 
-Naomi Pantillon: https://github.com/NaomiPant 
+Naomi Pantillon: https://github.com/NaomiPant (function show_learn(), report, package, tests)
 
-Cléa Pernet: https://github.com/clea04 
+Cléa Pernet: https://github.com/clea04 (function draw_quizz(), report, background of the app, tests)
