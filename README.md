@@ -45,19 +45,20 @@ The package requires other dependencies to run. The file "requirements.txt" list
 ```
 pip install -r requirements.txt
 ```
+## 💻 Streamlit
+
 In order to open the streamlit interface, run the following commands in "aminoacid" environment:
 
 ```
 streamlit run aa_app.py
 ```
 
-## Run tests and coverage
+## 📈 Run tests and coverage
 
 ```
 pip install tox
 tox
 ```
-## Streamlit
 
 If there is an error because of some dependencies issues, write the following commands:
 
