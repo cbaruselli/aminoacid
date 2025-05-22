@@ -1,3 +1,5 @@
+"""Two dictionaries that associate amino acid names with their SMILES strings."""
+
 amino_acids = {
         "Alanine": "CC(C(=O)O)N",
         "Arginine": "NC(CCCNC(=N)N)C(=O)O",
