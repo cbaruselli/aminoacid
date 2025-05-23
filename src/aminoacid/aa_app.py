@@ -2,17 +2,21 @@ import streamlit as st
 from streamlit_ketcher import st_ketcher 
 from rdkit import Chem 
 from rdkit.Chem import Draw 
-import random 
+
 import base64
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-from data.aminoacidlist import amino_acids
-from data.aminoacidlist import aa_stereo
+import json
+import random 
 from pathlib import Path
 
-_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
-ASSETS_DIR = _PROJECT_ROOT / "assets"
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+ASSETS_DIR = PROJECT_ROOT / "assets"
+
+with open(PROJECT_ROOT / "data" / "amino_acids.json", "r") as file:
+    AMINO_ACIDS = json.load(file)
+
+with open(PROJECT_ROOT / "data" / "aa_stereo.json", "r") as file:
+    AA_STEREO = json.load(file)
 
 st.title("🧬 Aminoacid")
 
@@ -123,8 +127,8 @@ def draw_quizz():
         st.session_state.incorrect_answers = []
     if "round_order" not in st.session_state:
         st.session_state.round_order = random.sample(
-            st.session_state.incorrect_answers if st.session_state.retry_mode else list(amino_acids.keys()),
-            len(st.session_state.incorrect_answers) if st.session_state.retry_mode else len(amino_acids)
+            st.session_state.incorrect_answers if st.session_state.retry_mode else list(AMINO_ACIDS.keys()),
+            len(st.session_state.incorrect_answers) if st.session_state.retry_mode else len(AMINO_ACIDS)
         )
     if "ketcher_key" not in st.session_state:
         st.session_state.ketcher_key = 0
@@ -139,7 +143,7 @@ def draw_quizz():
 
     # Set current target
     current_target = st.session_state.round_order[st.session_state.current_index]
-    target_smiles = amino_acids[current_target]
+    target_smiles = AMINO_ACIDS[current_target]
 
     total_questions = len(st.session_state.round_order)
 
@@ -290,7 +294,7 @@ def name_quizz():
 
     #Creation of session state
     if "name_quizz_order" not in st.session_state:
-        st.session_state.name_quizz_order = random.sample(list(amino_acids.items()), len(amino_acids))
+        st.session_state.name_quizz_order = random.sample(list(AMINO_ACIDS.items()), len(AMINO_ACIDS))
         st.session_state.name_quizz_index = 0
         st.session_state.wrong_answers = [] #list to keep the wrong answers
     if "name_quizz_score" not in st.session_state:
@@ -356,7 +360,7 @@ def name_quizz():
         if retry_mode:  #Adapt the nb of total questions depending on the mode
             tot_questions = len(st.session_state.name_quizz_order)  
         else:
-            tot_questions = len(amino_acids) #Adapt the nb of total questions depending on the mode
+            tot_questions = len(AMINO_ACIDS) #Adapt the nb of total questions depending on the mode
        
         percent_score = (st.session_state.name_quizz_score / tot_questions) * 100
 
@@ -394,7 +398,7 @@ def name_quizz():
             col3, col4 = st.columns(2)
             with col3:
                 if st.button("🔄 Retry incorrect answers "):
-                    st.session_state.name_quizz_order = [(aa, amino_acids[aa]) for aa in st.session_state.wrong_answers]
+                    st.session_state.name_quizz_order = [(aa, AMINO_ACIDS[aa]) for aa in st.session_state.wrong_answers]
                     st.session_state.name_quizz_index = 0
                     st.session_state.name_quizz_score = 0
                     st.session_state.wrong_answers = []
@@ -479,10 +483,10 @@ def show_learn():
     
     # Initialization of session state visible
     if "visible" not in st.session_state:
-        st.session_state.visible = {k: False for k in aa_stereo}
+        st.session_state.visible = {k: False for k in AA_STEREO}
     
     columns_per_row = 4 
-    aa_items = list(aa_stereo.items())
+    aa_items = list(AA_STEREO.items())
 
     # Grid layout of buttons
     for row_start in range(0, len(aa_items), columns_per_row):
